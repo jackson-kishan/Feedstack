@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: roadmaps
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    command: bash -c "php artisan serve --host=0.0.0.0 --port=9000"
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+    networks:
+      - laravel
+
+  node:
+    image: node:18
+    container_name: roadmaps
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    command: bash -c "npm install && npm run dev"
+    ports:
+      - "5173:5173" # If using Vite
+    networks:
+      - laravel
+
+  db:
+    image: mysql:8.0
+    container_name: roadmaps
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: roadmap
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - laravel
+
+volumes:
+  db-data:
+
+networks:
+  laravel:

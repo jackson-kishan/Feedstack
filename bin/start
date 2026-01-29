@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Start Laravel backend server
+echo "Starting Laravel backend..."
+php artisan serve --host=127.0.0.1 --port=8000 &
+
+# Navigate to frontend directory (change 'frontend' to your actual frontend folder)
+# cd frontend || exit
+
+# Start frontend development server
+echo "Starting frontend..."
+npm run dev
+
+# Keep the script running
+wait
