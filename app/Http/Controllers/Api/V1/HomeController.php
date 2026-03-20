@@ -12,7 +12,7 @@ use App\Models\PostTopic;
 use App\Helpers\Formatting;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\FeatureRequest;
+// use App\Models\FeatureRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\Debugbar\Facades\Debugbar;
@@ -27,7 +27,7 @@ class HomeController extends Controller
         $topicName = $request->query('topic');
         $sort = $request->query('sort');
         $sortIdea = $request->query('sortIdea');
-        Debugbar::info($request);
+        // Debugbar::info($request);
 
         $postQuery =  Post::where('board_id', $board->id)
         ->with(['created_by', 'status', 'boards', 'user', 'votes', 'topics']);
@@ -135,7 +135,8 @@ class HomeController extends Controller
 
     public function vote(Board $board,Post $post)
     {
-        $vote = $post->votes()->where('user_id', auth()->user()->id)->first();
+        $uId = Auth::user()->id;
+        $vote = $post->votes()->where('user_id', $uId)->first();
         $hasVoted = false;
 
         if($vote) {
@@ -144,8 +145,8 @@ class HomeController extends Controller
             $post->votes()->create([
               'board_id' => $post->board_id,
               'post_id' => $post->id,
-              'user_id' => auth()->user()->id,
-              'created_by' => auth()->user()->id,
+              'user_id' => $uId,
+              'created_by' => $uId,
             ]);
             $hasVoted = true;
         }
