@@ -18,19 +18,18 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(Board $board): Response
+    public function create(): Response
     {
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
-            'board' => $board,
         ]);
     }
 
     /**
      * Handle an incoming authentication request.
      */
-    public function store(Board $board, LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
@@ -42,7 +41,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Board $board, Request $request): RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
@@ -50,6 +49,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('idea.index', ['board' => $board]);
+        return redirect()->route('home',);
     }
 }

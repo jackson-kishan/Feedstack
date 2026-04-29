@@ -14,11 +14,11 @@ class EmailVerificationPromptController extends Controller
     /**
      * Display the email verification prompt.
      */
-    public function __invoke(Board $board, Request $request): RedirectResponse|Response
+    public function __invoke(Request $request): RedirectResponse|Response
     {
-        logger("EmailVerificationPromptController", ["board" => $board]);
+        logger("EmailVerificationPromptController");
         return $request->user()->hasVerifiedEmail()
-                    ? redirect()->intended(route('user.dashboard', ['board' => $board], absolute: false))
-                    : Inertia::render('Auth/VerifyEmail', ['status' => session('status'), 'board' => $board]);
+                    ? redirect()->intended(route('user.dashboard', absolute: false))
+                    : Inertia::render('Auth/VerifyEmail', ['status' => session('status')]);
     }
 }
